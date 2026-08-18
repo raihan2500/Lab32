@@ -1,0 +1,585 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{geometry}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+\usepackage{enumitem}
+
+\geometry{margin=1in}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.7em}
+
+\title{An Interactive Introduction to \LaTeX\\[0.3em]
+\large Part 1: The Basics}
+\author{Prepared by: Your Name\\
+\small Based on the introductory material by Dr John D. Lees-Miller}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+\tableofcontents
+\newpage
+
+\section{Why Use \LaTeX?}
+
+\LaTeX\ is a document-preparation system designed to produce
+well-formatted documents. It is especially useful for mathematics
+and scientific writing. It was created by scientists for scientists,
+has a large and active community, and can be extended through
+thousands of packages. These packages support many kinds of work,
+including papers, presentations, spreadsheets, and other technical
+documents.
+
+The main idea is to describe \emph{what the content is} rather than
+manually controlling \emph{how every part looks}. The writer can
+therefore focus on the content and allow \LaTeX\ to manage the
+formatting.
+
+\section{How \LaTeX\ Works}
+
+A \LaTeX\ document is written as plain text containing commands that
+describe the structure and meaning of the content. The \LaTeX\
+program processes the source file and produces a formatted document,
+usually as a PDF.
+
+For example, the following source code emphasizes one word:
+
+\begin{verbatim}
+The rain in Spain falls \emph{mainly} on the plain.
+\end{verbatim}
+
+Its output is:
+
+The rain in Spain falls \emph{mainly} on the plain.
+
+Commands can also create lists, figures, equations, and many other
+document elements.
+
+\section{A Minimal \LaTeX\ Document}
+
+A minimal \LaTeX\ document has the following form:
+
+\begin{verbatim}
+\documentclass{article}
+
+\begin{document}
+
+Hello World! % Your content goes here.
+
+\end{document}
+\end{verbatim}
+
+Important ideas are:
+
+\begin{itemize}
+    \item A command normally begins with a backslash, such as
+    \verb|\documentclass|.
+    \item Every document starts with a \verb|\documentclass| command.
+    \item The argument inside curly braces tells \LaTeX\ which kind of
+    document to create. In this example, the class is \verb|article|.
+    \item The main content is written between
+    \verb|\begin{document}| and \verb|\end{document}|.
+    \item A percent sign starts a comment. \LaTeX\ ignores the
+    remainder of that source-code line.
+\end{itemize}
+
+\section{Writing and Compiling the Document}
+
+An online editor such as Overleaf can be used to write and compile a
+\LaTeX\ document. It compiles the source automatically and displays
+the result. The examples in this document can be tested by typing them
+into a \texttt{.tex} file and compiling it.
+
+\section{Typesetting Ordinary Text}
+
+For most ordinary text, the writer can type normally between
+\verb|\begin{document}| and \verb|\end{document}|.
+
+Words are separated by one or more spaces. However, several spaces in
+the source are normally collapsed into a single space in the output.
+
+Paragraphs are separated by one or more blank lines. For example, the
+following source contains two paragraphs:
+
+\begin{verbatim}
+This is the first paragraph.
+
+This is the second paragraph.
+\end{verbatim}
+
+A line break in the source does not necessarily create a line break in
+the final PDF. For example,
+
+\begin{verbatim}
+The rain in Spain
+falls mainly on the plain.
+\end{verbatim}
+
+is normally typeset as one continuous sentence.
+
+\section{Quotation Marks and Special Characters}
+
+\subsection{Quotation Marks}
+
+Quotation marks require special source-code forms. A left single
+quotation mark is written with a backtick, and a right single
+quotation mark is written with an apostrophe:
+
+\begin{verbatim}
+`single quotation'
+\end{verbatim}
+
+Double quotation marks are written with two backticks on the left and
+two apostrophes on the right:
+
+\begin{verbatim}
+``double quotation''
+\end{verbatim}
+
+The resulting output is `single quotation' and ``double quotation''.
+
+\subsection{Special Characters}
+
+Some characters have special meanings in \LaTeX. Common examples are:
+
+\begin{center}
+\begin{tabular}{ll}
+\verb|%| & starts a comment,\\
+\verb|#| & is used with macro parameters,\\
+\verb|&| & marks an alignment point,\\
+\verb|$| & begins or ends inline mathematics.
+\end{tabular}
+\end{center}
+
+To display these characters as ordinary text, they are usually escaped
+with a backslash:
+
+\begin{verbatim}
+\% \# \& \$
+\end{verbatim}
+
+The output is: \% \# \& \$.
+
+\section{Basic Commands and Environments}
+
+\subsection{Emphasis}
+
+The command \verb|\emph| emphasizes text:
+
+\begin{verbatim}
+This word is \emph{important}.
+\end{verbatim}
+
+Output: This word is \emph{important}.
+
+\subsection{A Bulleted List}
+
+The \texttt{itemize} environment creates a bulleted list:
+
+\begin{verbatim}
+\begin{itemize}
+    \item Tea
+    \item Milk
+    \item Biscuits
+\end{itemize}
+\end{verbatim}
+
+The output is:
+
+\begin{itemize}
+    \item Tea
+    \item Milk
+    \item Biscuits
+\end{itemize}
+
+\subsection{A Figure}
+
+A figure can be inserted with the \texttt{figure} environment and the
+\verb|\includegraphics| command:
+
+\begin{verbatim}
+\begin{figure}
+    \centering
+    \includegraphics{gerbil}
+\end{figure}
+\end{verbatim}
+
+The following compiling example displays \texttt{gerbil.png} when that
+file is available; otherwise, it displays a placeholder:
+
+\begin{figure}[htbp]
+    \centering
+    \IfFileExists{gerbil.png}
+      {\includegraphics[width=0.45\textwidth]{gerbil.png}}
+      {\fbox{\parbox[c][4cm][c]{0.45\textwidth}
+      {\centering Place \texttt{gerbil.png} in the project folder.}}}
+    \caption{An example of the \texttt{figure} environment.}
+\end{figure}
+
+\subsection{A Numbered Equation}
+
+The \texttt{equation} environment displays and numbers an equation:
+
+\begin{equation}
+    \alpha+\beta+1
+\end{equation}
+
+\section{Handling Errors}
+
+A compilation error occurs when \LaTeX\ cannot understand part of the
+source. For example, misspelling \verb|\emph| as \verb|\meph| causes
+an ``undefined control sequence'' error because \LaTeX\ does not know
+the command \verb|\meph|.
+
+Useful advice for handling errors is:
+
+\begin{enumerate}
+    \item Do not panic; errors are a normal part of writing source code.
+    \item Fix errors as soon as they appear. The most recently added
+    source is often the best place to begin checking.
+    \item When several errors are reported, start with the first one.
+    A later error may be only a consequence of an earlier mistake.
+    \item Check the lines above the reported location because the real
+    cause may appear earlier.
+\end{enumerate}
+
+\section{Typesetting Exercise 1: Text and Special Characters}
+
+The following paragraph contains dollar signs, a percentage sign, and
+quotation marks, so the special characters must be written correctly:
+
+\begin{quote}
+In March 2006, Congress raised that ceiling an additional
+\$0.79 trillion to \$8.97 trillion, which is approximately
+68\% of GDP. As of October 4, 2008, the
+``Emergency Economic Stabilization Act of 2008''
+raised the current debt ceiling to \$11.3 trillion.
+\end{quote}
+
+A suitable source form is:
+
+\begin{verbatim}
+In March 2006, Congress raised that ceiling an additional
+\$0.79 trillion to \$8.97 trillion, which is approximately
+68\% of GDP. As of October 4, 2008, the
+``Emergency Economic Stabilization Act of 2008''
+raised the current debt ceiling to \$11.3 trillion.
+\end{verbatim}
+
+\section{Inline Mathematics}
+
+Dollar signs are used in pairs to mark mathematics inside a sentence.
+For example:
+
+\begin{verbatim}
+Let $a$ and $b$ be distinct positive integers, and let
+$c=a-b+1$.
+\end{verbatim}
+
+The output is: Let $a$ and $b$ be distinct positive integers, and let
+$c=a-b+1$.
+
+Mathematical expressions should be placed in math mode. Compare the
+ordinary-text expression \texttt{c = a - b + 1} with the properly
+typeset expression $c=a-b+1$.
+
+\LaTeX\ manages mathematical spacing automatically. Therefore,
+
+\begin{verbatim}
+$y=mx+b$
+\end{verbatim}
+
+and
+
+\begin{verbatim}
+$y = m x + b$
+\end{verbatim}
+
+produce essentially the same mathematical spacing: $y=mx+b$.
+
+Inline mathematics can also be written with the \texttt{math}
+environment:
+
+\begin{verbatim}
+\begin{math}
+y=mx+b
+\end{math}
+\end{verbatim}
+
+\section{Superscripts, Subscripts, and Grouping}
+
+A caret creates a superscript, and an underscore creates a subscript:
+
+\begin{equation*}
+    y=c_2x^2+c_1x+c_0.
+\end{equation*}
+
+Curly braces group several characters into one superscript or
+subscript. For example, the correct Fibonacci relation is
+
+\begin{equation*}
+    F_n=F_{n-1}+F_{n-2}.
+\end{equation*}
+
+Without braces, \verb|F_n-1| means $F_n-1$, not $F_{n-1}$.
+
+\section{Greek Letters and Common Mathematical Notation}
+
+Greek letters are written with commands such as
+\verb|\alpha|, \verb|\beta|, \verb|\mu|, \verb|\Omega|, and
+\verb|\omega|.
+
+For example,
+
+\begin{equation*}
+    \mu=Ae^{Q/RT},
+\end{equation*}
+
+where $\mu$, $A$, $Q$, $R$, and $T$ are mathematical symbols.
+
+A summation is written with \verb|\sum|:
+
+\begin{equation*}
+    \Omega=\sum_{k=1}^{n}\omega_k.
+\end{equation*}
+
+Here, $k=1$ is the lower limit and $n$ is the upper limit.
+
+\section{Displayed Equations}
+
+A large mathematical expression can be displayed on its own line with
+the \texttt{equation} environment. The roots of a quadratic equation
+are given by
+
+\begin{equation}
+    x=\frac{-b\pm\sqrt{b^2-4ac}}{2a},
+\end{equation}
+
+where $a$, $b$, and $c$ are the coefficients of the quadratic
+equation.
+
+The commands used above include:
+
+\begin{itemize}
+    \item \verb|\frac{numerator}{denominator}| for a fraction,
+    \item \verb|\pm| for the plus-or-minus symbol,
+    \item \verb|\sqrt{...}| for a square root,
+    \item \verb|^| for superscripts.
+\end{itemize}
+
+Blank lines should not be placed inside a mathematical environment.
+
+\section{Understanding Environments}
+
+An environment is a context created with matching \verb|\begin| and
+\verb|\end| commands:
+
+\begin{verbatim}
+\begin{environment-name}
+    Content
+\end{environment-name}
+\end{verbatim}
+
+The same mathematical source can appear differently in different
+contexts. For example, the expression
+$\Omega=\sum_{k=1}^{n}\omega_k$ appears compactly in a sentence, while
+
+\begin{equation}
+    \Omega=\sum_{k=1}^{n}\omega_k
+\end{equation}
+
+appears larger in a displayed equation. The summation symbol and the
+positions of its limits change according to the context.
+
+\section{List Environments}
+
+The \texttt{itemize} environment creates bullet points:
+
+\begin{itemize}
+    \item Biscuits
+    \item Tea
+\end{itemize}
+
+The \texttt{enumerate} environment creates numbered items:
+
+\begin{enumerate}
+    \item Biscuits
+    \item Tea
+\end{enumerate}
+
+Their source forms are:
+
+\begin{verbatim}
+\begin{itemize}
+    \item Biscuits
+    \item Tea
+\end{itemize}
+
+\begin{enumerate}
+    \item Biscuits
+    \item Tea
+\end{enumerate}
+\end{verbatim}
+
+\section{Packages and the Preamble}
+
+Many basic commands and environments are built into \LaTeX. Packages
+are libraries that provide additional commands and environments.
+Packages are loaded in the preamble, which is the part of the source
+between \verb|\documentclass| and \verb|\begin{document}|.
+
+For example, the \texttt{amsmath} package from the American
+Mathematical Society is loaded as follows:
+
+\begin{verbatim}
+\documentclass{article}
+\usepackage{amsmath}
+
+\begin{document}
+
+% Commands from amsmath can now be used here.
+
+\end{document}
+\end{verbatim}
+
+This document also loads \texttt{graphicx} so that images can be
+included.
+
+\section{Unnumbered Equations with \texttt{amsmath}}
+
+The starred \texttt{equation*} environment displays an equation
+without assigning an equation number:
+
+\begin{equation*}
+    \Omega=\sum_{k=1}^{n}\omega_k.
+\end{equation*}
+
+Its source is:
+
+\begin{verbatim}
+\begin{equation*}
+    \Omega=\sum_{k=1}^{n}\omega_k
+\end{equation*}
+\end{verbatim}
+
+\section{Mathematical Operators}
+
+In mathematics, adjacent letters are normally interpreted as separate
+variables multiplied together. Therefore, named operators should use
+appropriate operator commands.
+
+A minimization expression should use \verb|\min|:
+
+\begin{equation*}
+    \min_{x,y}\left\{(1-x)^2+100(y-x^2)^2\right\}.
+\end{equation*}
+
+For operators without a predefined command, \verb|\operatorname| can
+be used. For example,
+
+\begin{equation*}
+    \beta_i=
+    \frac{\operatorname{Cov}(R_i,R_m)}
+         {\operatorname{Var}(R_m)}.
+\end{equation*}
+
+In this expression, $\operatorname{Cov}$ denotes covariance and
+$\operatorname{Var}$ denotes variance.
+
+\section{Aligned Equations}
+
+The \texttt{align*} environment aligns a sequence of equations. The
+ampersand marks the alignment position, and a double backslash starts
+a new line:
+
+\begin{align*}
+    (x+1)^3
+        &= (x+1)(x+1)(x+1) \\
+        &= (x+1)(x^2+2x+1) \\
+        &= x^3+3x^2+3x+1.
+\end{align*}
+
+The corresponding source is:
+
+\begin{verbatim}
+\begin{align*}
+(x+1)^3 &= (x+1)(x+1)(x+1) \\
+        &= (x+1)(x^2+2x+1) \\
+        &= x^3+3x^2+3x+1
+\end{align*}
+\end{verbatim}
+
+Because the environment name contains a star, the equations are not
+numbered.
+
+\section{Typesetting Exercise 2: Probability and Mathematics}
+
+Let $X_1,X_2,\ldots,X_n$ be a sequence of independent and identically
+distributed random variables with
+$\operatorname{E}[X_i]=\mu$ and
+$\operatorname{Var}[X_i]=\sigma^2<\infty$, and let
+
+\begin{equation*}
+    S_n=\frac{1}{n}\sum_{i=1}^{n}X_i
+\end{equation*}
+
+denote their mean. Then, as $n$ approaches infinity, the random
+variables
+
+\begin{equation*}
+    \sqrt{n}(S_n-\mu)
+\end{equation*}
+
+converge in distribution to a normal distribution
+$\mathcal{N}(0,\sigma^2)$.
+
+The command for the infinity symbol is \verb|\infty|. The source for
+the main statement is:
+
+\begin{verbatim}
+Let $X_1,X_2,\ldots,X_n$ be independent and identically
+distributed random variables with
+$\operatorname{E}[X_i]=\mu$ and
+$\operatorname{Var}[X_i]=\sigma^2<\infty$, and let
+
+\begin{equation*}
+S_n=\frac{1}{n}\sum_{i=1}^{n}X_i
+\end{equation*}
+
+denote their mean. Then, as $n$ approaches infinity,
+$\sqrt{n}(S_n-\mu)$ converges in distribution to
+$\mathcal{N}(0,\sigma^2)$.
+\end{verbatim}
+
+\section{Summary}
+
+This document has demonstrated how to:
+
+\begin{itemize}
+    \item create a minimal \LaTeX\ article;
+    \item write and format ordinary text;
+    \item use comments, commands, arguments, and special characters;
+    \item write correct quotation marks;
+    \item emphasize text;
+    \item create figures, bulleted lists, and numbered lists;
+    \item recognize and respond to compilation errors;
+    \item write inline and displayed mathematics;
+    \item use superscripts, subscripts, grouping, Greek letters,
+    fractions, square roots, sums, and infinity;
+    \item work with environments;
+    \item load packages in the preamble;
+    \item create numbered and unnumbered equations;
+    \item use mathematical operators;
+    \item align multi-line equations.
+\end{itemize}
+
+A later stage of learning \LaTeX\ can introduce more structured
+documents with sections, cross-references, figures, tables, and
+bibliographies.
+
+\end{document}

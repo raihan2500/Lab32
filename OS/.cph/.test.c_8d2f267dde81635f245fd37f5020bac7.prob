@@ -1,0 +1,1 @@
+{"name":"Local: test","url":"/home/raihan/Desktop/OS/test.c","tests":[{"id":1787083338964,"input":"hello","output":""}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"/home/raihan/Desktop/OS/test.c","group":"local","local":true}
