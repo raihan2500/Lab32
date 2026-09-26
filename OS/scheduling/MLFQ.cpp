@@ -133,7 +133,7 @@ Input Format:
 First enter the number of processes (n).
 Then enter Arrival Time (AT) and Burst Time (BT) for each process.
 
-Example:
+Example Input:
 5
 0 5
 1 3
@@ -141,8 +141,16 @@ Example:
 3 6
 4 4
 
-Scheduling:
-Q1 -> Round Robin (Time Quantum = 2)
-Q2 -> Round Robin (Time Quantum = 4)
-Q3 -> FCFS/SJF level execution
+Algorithm:
+- This program implements Multilevel Queue Scheduling.
+- Three priority levels are used:
+    Queue 1 -> Round Robin Scheduling (Time Quantum = 2)
+    Queue 2 -> Round Robin Scheduling (Time Quantum = 4)
+    Queue 3 -> FCFS execution for remaining processes
+- All newly arrived processes enter Queue 1 first.
+- If a process is not completed in Queue 1, it moves to Queue 2.
+- If it is still not completed in Queue 2, it moves to Queue 3.
+- Higher priority queues are always executed before lower priority queues.
+- The program calculates Completion Time (CT), Turnaround Time (TAT), and Waiting Time (WT).
+- Finally, it displays average TAT, average WT, and the Gantt Chart.
 */

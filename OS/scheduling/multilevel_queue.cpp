@@ -118,8 +118,7 @@ int32_t main(){
 /*
 Input Format:
 First enter the number of processes (n).
-Then enter the following details for each process:
-Arrival Time (AT), Burst Time (BT), and Queue Number.
+Then enter Arrival Time (AT), Burst Time (BT), and Queue Number for each process.
 
 Queue Details:
 Queue 1 -> FCFS Scheduling (Higher Priority)
@@ -133,9 +132,12 @@ Example Input:
 3 6 2
 4 4 2
 
-Explanation:
-- Processes with queue number 1 are executed using FCFS.
-- Processes with queue number 2 are executed using Round Robin.
-- CPU always gives priority to Queue 1. Queue 2 executes only when Queue 1 is empty.
-- The program calculates Completion Time (CT), Turnaround Time (TAT), Waiting Time (WT), and displays the Gantt Chart.
+Algorithm:
+- This program implements Multilevel Queue Scheduling.
+- Each process is assigned to a specific queue using the queue number.
+- Queue 1 has higher priority and uses FCFS scheduling.
+- Queue 2 has lower priority and uses Round Robin scheduling with a fixed time quantum.
+- CPU always executes Queue 1 before Queue 2.
+- The program calculates Completion Time (CT), Turnaround Time (TAT), and Waiting Time (WT).
+- Finally, it displays average TAT, average WT, and the Gantt Chart.
 */
