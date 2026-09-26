@@ -47,8 +47,7 @@ int32_t main(){
   }
 
   queue<int> q1, q2, q3;
-  //q1 = rr, q2 = rr, q3 = sjf
-  int tq1 = 2, tq2 = 4;
+  int tq1 = 2, tq2 = 4; //Time quantum for round robin 1 and 2 
 
   int curTime = 0, completed = 0;
 
@@ -128,3 +127,22 @@ int32_t main(){
   cout << "Total waiting time: " << totWt << endl;
   showGanttChart(g);
 }
+
+/*
+Input Format:
+First enter the number of processes (n).
+Then enter Arrival Time (AT) and Burst Time (BT) for each process.
+
+Example:
+5
+0 5
+1 3
+2 8
+3 6
+4 4
+
+Scheduling:
+Q1 -> Round Robin (Time Quantum = 2)
+Q2 -> Round Robin (Time Quantum = 4)
+Q3 -> FCFS/SJF level execution
+*/
