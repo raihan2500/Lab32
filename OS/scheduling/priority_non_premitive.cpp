@@ -4,11 +4,11 @@ using namespace std;
 #define nl cout << endl;
 
 struct Process{
-  int pid, at, bt;
+  int pid, at, bt, priority;
   int ct, tat, wt;
   bool finished = false;
   void show(){
-    cout << pid <<"\t" << at <<"\t" << bt <<"\t" << ct <<"\t" << tat <<"\t" << wt << endl;
+    cout << pid <<"\t" << at <<"\t" << bt <<"\t" << priority <<"\t\t\t" << ct <<"\t" << tat <<"\t" << wt << endl;
   }
 };
 
@@ -19,11 +19,7 @@ struct Gantt{
 void showGanttChart(vector<Gantt> g){
   cout << "\n\nGantt Chart\n\n";
   for(auto x : g){
-    if(x.pid == -1){
-      cout <<"|Idle";
-    }else{
-      cout <<"| P" << x.pid <<" ";
-    }
+    cout <<"| P" << x.pid <<" ";
   }
   cout << "|\n";
   cout << g[0].start;
@@ -40,28 +36,25 @@ int32_t main(){
   vector<Gantt> g;
   for(int i = 0; i < n; i++){
     p[i].pid = i + 1;
-    cin >> p[i].at >> p[i].bt;
+    cin >> p[i].at >> p[i].bt >> p[i].priority;
   }
 
-  int completed = 0, curTime = 0;
+  int curTime = 0, completed = 0;
   while(completed < n){
     int selected = -1;
     for(int i = 0; i < n; i++){
       if(!p[i].finished and p[i].at <= curTime){
-        if(selected == -1 or p[i].bt < p[selected].bt or (p[i].bt == p[selected].bt and p[i].at < p[selected].at)){
+        if(selected == -1 or p[i].priority < p[selected].priority){
           selected = i;
         }
       }
     }
-
     if(selected == -1){
-      g.push_back({-1, curTime, curTime + 1});
       curTime++;
       continue;
     }
+    g.push_back({p[selected].pid, curTime, curTime + p[selected].bt});
     curTime += p[selected].bt;
-    int i = selected;
-    g.push_back({p[i].pid, curTime - p[i].bt, curTime});
 
     p[selected].ct = curTime;
     p[selected].tat = p[selected].ct - p[selected].at;
@@ -70,7 +63,7 @@ int32_t main(){
     completed++;
   }
   
-  cout << "\nPID\tAT\tBT\tCT\tTAT\tWT\n";
+  cout << "\nPID\tAT\tBT\tPriority\tCT\tTAT\tWT\n";
 
   double totTat = 0, totWt = 0;
   for(auto i : p){
@@ -85,3 +78,25 @@ int32_t main(){
   cout << "Total waiting time: " << totWt << endl;
   showGanttChart(g);
 }
+
+/*
+Input Format:
+First enter the number of processes (n).
+Then enter Arrival Time (AT), Burst Time (BT), and Priority value for each process.
+
+Example Input:
+5
+0 5 2
+1 3 1
+2 8 4
+3 6 3
+4 4 2
+
+Algorithm:
+- This program implements Non-Preemptive Priority Scheduling.
+- At every step, among all arrived processes, the process with the highest priority is selected.
+- A smaller priority number represents a higher priority.
+- The selected process runs until completion.
+- The program calculates Completion Time (CT), Turnaround Time (TAT), and Waiting Time (WT).
+- Finally, it displays the average turnaround time, average waiting time, and the Gantt Chart.
+*/

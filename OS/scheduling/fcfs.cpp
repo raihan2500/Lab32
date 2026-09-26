@@ -74,3 +74,24 @@ int32_t main(){
 
   
 }
+
+/*
+Input Format:
+First enter the number of processes (n).
+Then enter Arrival Time (AT) and Burst Time (BT) for each process.
+
+Example Input:
+5
+0 5
+1 3
+2 8
+3 6
+4 4
+
+Algorithm:
+- The processes are sorted according to Arrival Time (AT).
+- If two processes have the same arrival time, the process with the smaller PID executes first.
+- This program implements FCFS (First Come First Serve) CPU Scheduling.
+- It calculates Completion Time (CT), Turnaround Time (TAT), and Waiting Time (WT).
+- Finally, it displays the average turnaround time, average waiting time, and Gantt Chart.
+*/

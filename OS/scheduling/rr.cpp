@@ -106,3 +106,27 @@ int32_t main(){
 
   
 }
+
+/*
+Input Format:
+First enter the number of processes (n).
+Then enter Arrival Time (AT) and Burst Time (BT) for each process.
+Finally, enter the Time Quantum (TQ) value.
+
+Example Input:
+5
+0 5
+1 3
+2 8
+3 6
+4 4
+2
+
+Algorithm:
+- This program implements Round Robin CPU Scheduling.
+- Each process gets a fixed CPU time called Time Quantum (TQ).
+- If a process is not completed within its quantum, it is moved to the end of the ready queue.
+- Processes are executed in circular order until all processes are completed.
+- The program calculates Completion Time (CT), Turnaround Time (TAT), and Waiting Time (WT).
+- Finally, it displays average TAT, average WT, and the Gantt Chart.
+*/

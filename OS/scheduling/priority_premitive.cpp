@@ -6,7 +6,9 @@ using namespace std;
 struct Process{
   int pid, at, bt, priority;
   int ct, tat, wt;
+  int rem_bt;
   bool finished = false;
+
   void show(){
     cout << pid <<"\t" << at <<"\t" << bt <<"\t" << priority <<"\t\t\t" << ct <<"\t" << tat <<"\t" << wt << endl;
   }
@@ -37,6 +39,7 @@ int32_t main(){
   for(int i = 0; i < n; i++){
     p[i].pid = i + 1;
     cin >> p[i].at >> p[i].bt >> p[i].priority;
+    p[i].rem_bt = p[i].bt;
   }
 
   int curTime = 0, completed = 0;
@@ -53,14 +56,23 @@ int32_t main(){
       curTime++;
       continue;
     }
-    g.push_back({p[selected].pid, curTime, curTime + p[selected].bt});
-    curTime += p[selected].bt;
+    curTime++;
+    p[selected].rem_bt--;
 
-    p[selected].ct = curTime;
-    p[selected].tat = p[selected].ct - p[selected].at;
-    p[selected].wt = p[selected].tat - p[selected].bt;
-    p[selected].finished = true;
-    completed++;
+    if(!g.empty() and g.back().pid == selected){
+      g.back().end = curTime;
+    }else{
+      g.push_back({selected, curTime-1, curTime});
+    }
+
+    if(p[selected].rem_bt == 0){
+      p[selected].ct = curTime;
+      p[selected].tat = p[selected].ct - p[selected].at;
+      p[selected].wt = p[selected].tat - p[selected].bt;
+      p[selected].finished = true;
+      completed++;
+    }
+
   }
   
   cout << "\nPID\tAT\tBT\tPriority\tCT\tTAT\tWT\n";
@@ -78,3 +90,26 @@ int32_t main(){
   cout << "Total waiting time: " << totWt << endl;
   showGanttChart(g);
 }
+
+/*
+Input Format:
+First enter the number of processes (n).
+Then enter Arrival Time (AT), Burst Time (BT), and Priority value for each process.
+
+Example Input:
+5
+0 5 2
+1 3 1
+2 8 4
+3 6 3
+4 4 2
+
+Algorithm:
+- This program implements Preemptive Priority Scheduling.
+- At every unit of time, the scheduler selects the arrived process with the highest priority.
+- A smaller priority number indicates a higher priority.
+- The running process can be interrupted if another higher-priority process arrives.
+- Remaining Burst Time (rem_bt) is used to track unfinished execution.
+- The program calculates Completion Time (CT), Turnaround Time (TAT), and Waiting Time (WT).
+- Finally, it displays average TAT, average WT, and the Gantt Chart.
+*/

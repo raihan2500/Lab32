@@ -90,3 +90,25 @@ int32_t main(){
   cout << "Total waiting time: " << totWt << endl;
   showGanttChart(g);  
 }
+
+/*
+Input Format:
+First enter the number of processes (n).
+Then enter Arrival Time (AT) and Burst Time (BT) for each process.
+
+Example Input:
+5
+0 5
+1 3
+2 8
+3 6
+4 4
+
+Algorithm:
+- This program implements Preemptive Shortest Job First (SRTF - Shortest Remaining Time First) Scheduling.
+- At every unit of time, the process with the shortest remaining burst time among arrived processes is selected.
+- The running process can be interrupted if another process with a shorter remaining time arrives.
+- Remaining burst time is stored in the rem array.
+- The program calculates Completion Time (CT), Turnaround Time (TAT), and Waiting Time (WT).
+- Finally, it displays average TAT, average WT, and the Gantt Chart.
+*/

@@ -113,3 +113,29 @@ int32_t main(){
   cout << "Total waiting time: " << totWt << endl;
   showGanttChart(g);
 }
+
+
+/*
+Input Format:
+First enter the number of processes (n).
+Then enter the following details for each process:
+Arrival Time (AT), Burst Time (BT), and Queue Number.
+
+Queue Details:
+Queue 1 -> FCFS Scheduling (Higher Priority)
+Queue 2 -> Round Robin Scheduling (Time Quantum = 2)
+
+Example Input:
+5
+0 5 1
+1 3 2
+2 8 1
+3 6 2
+4 4 2
+
+Explanation:
+- Processes with queue number 1 are executed using FCFS.
+- Processes with queue number 2 are executed using Round Robin.
+- CPU always gives priority to Queue 1. Queue 2 executes only when Queue 1 is empty.
+- The program calculates Completion Time (CT), Turnaround Time (TAT), Waiting Time (WT), and displays the Gantt Chart.
+*/
