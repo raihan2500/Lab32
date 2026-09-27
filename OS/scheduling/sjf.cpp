@@ -57,11 +57,6 @@ int32_t main(){
 		p[i].pid = i + 1;
 	}
 
-	sort(p.begin(), p.end(), [&](auto a, auto b){
-		if(a.at == b.at)return a.pid < b.pid;
-		return a.at < b.at;
-	});
-
 	vector<Gantt> g;
 	int curTime = 0, completed = 0;
 
