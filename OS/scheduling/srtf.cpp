@@ -1,94 +1,106 @@
 #include<bits/stdc++.h>
 using namespace std;
+#define nl cout << endl 
 
-#define nl cout << endl;
 struct Process{
-  int pid, at, bt;
-  int ct, tat, wt;
-  void show(){
-    cout << pid <<"\t" << at <<"\t" << bt <<"\t" << ct <<"\t" << tat <<"\t" << wt << endl;
-  }
+	int pid, at, bt, tat, ct, wt, rem; 
+	bool finished = false;
+	void show(){
+		cout << pid <<"\t" << at <<"\t" << bt <<"\t" << ct <<"\t" << tat <<"\t" << wt << endl;
+	}
 };
 
 struct Gantt{
-  int pid, start, end;
+	int pid, start, end;
+
 };
 
-void showGanttChart(vector<Gantt> g){
-  cout << "\n\nGantt Chart\n\n";
-  for(auto x : g){
-    if(x.pid == -1){
+int n; 
+
+void Print(vector<Process> &p, vector<Gantt> &g){
+	cout << "PID\tAT\tBT\tCT\tTAT\tWT\n";
+	double totTat = 0, totWt = 0;
+	for(auto i : p){
+		totWt += i.wt;
+		totTat += i.tat;
+		i.show();
+	}	
+	totTat /= n; totWt /= n;
+
+	nl;
+	cout << "Total turnaround time: " << totTat << endl;
+	cout << "Total waiting time: " << totWt << endl;
+
+	//Gantt Chart
+	cout << "\n\nGantt Chart\n\n";
+	for(auto i : g){
+    if(i.pid == -1){
       cout <<"|Idle";
     }else{
-      cout <<"| P" << x.pid <<" ";
+      cout <<"| P" << i.pid <<" ";
     }
   }
-  cout << "|\n";
-  cout << g[0].start;
-  for(auto x : g){
-    cout << setw(5) << x.end;
-  }
-  nl;
+	cout << "|\n";
+	cout << g[0].start;
+	for(auto i : g){
+		cout << setw(5) << i.end;
+	}
+	nl;
+
 }
 
 int32_t main(){
-  int n = 0; 
-  cin >> n;
-  vector<Gantt> g;
-  vector<Process> p(n);
-  vector<int> rem(n);
-  for(int i = 0; i < n; i++){
-    p[i].pid = i + 1;
-    cin >> p[i].at >> p[i].bt;
-    rem[i] = p[i].bt;
-  }
+	cin >> n;
+	vector<Process> p(n);
+	for(int i = 0; i < n; i++){
+		cin >> p[i].at >> p[i].bt; 
+		p[i].pid = i + 1;
+		p[i].rem = p[i].bt;
+	}
+
+	sort(p.begin(), p.end(), [&](auto a, auto b){
+		if(a.at == b.at)return a.pid < b.pid;
+		return a.at < b.at;
+	});
+
+	vector<Gantt> g;
+	int curTime = 0, completed = 0;
 
 
-  int curTime = 0;
-  int completed = 0;
-  int exc = 1;
+	while(completed < n){
+		int s = -1;
+		for(int i = 0; i < n; i++){
+			if(!p[i].finished and p[i].at <= curTime){
+				if(s == -1 or (p[i].rem < p[s].rem) or (p[i].rem == p[s].rem and p[i].at < p[s].at)){
+					s = i;
+				}
+			}
+		}
+		if(s == -1){
+			g.push_back({-1, curTime, curTime + 1});
+			curTime++;
+		}else{
+			auto &x = p[s];
+			if(!g.empty() and g.back().pid == x.pid){
+				g.back().end++;
+			}else{
+				g.push_back({x.pid, curTime, curTime + 1});
+			}
+			curTime++;
+			x.rem--;
 
-  while(completed < n){
-    int selected = -1;
-    for(int i = 0; i < n; i++){
-      if(p[i].at <= curTime and rem[i]){
-        if(selected == -1 or rem[i] < rem[selected] or (rem[i] == rem[selected] and p[i].at < p[selected].at)){
-          selected = i;
-        }
-      }
-    }
+			if(x.rem == 0){
+				x.ct = curTime;
+				x.tat = x.ct - x.at;
+				x.wt = x.tat - x.bt;
+				x.finished = true;
+				completed++;
+			}
 
-    if(selected == -1){
-      curTime++;
-      g.push_back({-1, curTime, curTime + 1});
-      continue;
-    }
-    rem[selected]--;
-    g.push_back({p[selected].pid, curTime, curTime + 1});
-    curTime++;
+		}
+	}
 
-    if(rem[selected] == 0){
-      p[selected].ct = curTime;
-      p[selected].tat = p[selected].ct - p[selected].at;
-      p[selected].wt = p[selected].tat - p[selected].bt;
-      completed++;
-    }
-
-  }
-
-  cout << "\nPID\tAT\tBT\tCT\tTAT\tWT\n";
-
-  double totTat = 0, totWt = 0;
-  for(auto i : p){
-    totTat += i.tat;
-    totWt += i.wt;
-    i.show();
-  }
-  totTat /= n; totWt /= n;
-  nl;
-  cout << "Total turnaround time: " << totTat << endl;
-  cout << "Total waiting time: " << totWt << endl;
-  showGanttChart(g);  
+	Print(p, g);
 }
 
 /*
