@@ -23,7 +23,7 @@ void process1(){
 void process2(){
   for(int i = 0; i < 5; i++){
     flag[1] = true; //process 2 needs to enter critical section
-    turn = 0; //check if Process1 needs it or not
+    turn = 0; //check if Process1 needs it or no
     while(flag[0] and turn == 0);
 
     cout << "Process 2 is in critical section\n";
