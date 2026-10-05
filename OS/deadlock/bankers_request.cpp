@@ -1,0 +1,242 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+
+#ifdef DEBUG
+#include<algo/debug.h>
+#include<algo/resources.h>
+#else
+#   define clog if (0) cerr
+#   define DB(...)
+#   define db(...) "" 
+#endif
+
+const int M = 1e9 + 7;
+const int N = 2e5 + 10;
+
+#define v2d vector<vector<int>> 
+
+int n, m;
+
+bool isSafe(vector<int> work, v2d alloc, v2d need){
+  vector<bool> finished(n, false);
+
+  auto check = [&](int i){
+    for(int j = 0; j < m; j++){
+      if(need[i][j] > work[j]){
+        return false;
+      }
+    }
+    for(int j = 0; j < m; j++){
+      work[j] += alloc[i][j];
+    }
+    return true;
+  };
+
+  int completed = 0;
+  while(completed < n){
+    bool flg = false;
+    for(int i = 0; i < n; i++){
+      if(!finished[i] and check(i)){
+        flg = true;
+        completed++;
+        finished[i] = true;
+      }
+    }
+    if(!flg)break;
+  }
+  return completed == n;
+}
+
+
+int32_t main(){
+  cin >> n >> m;
+  vector<int> avail(m), work(m);
+  vector<vector<int>> mx(n, vector<int>(m)), alloc = mx, need = mx, request = mx;
+
+  for(int i = 0; i < m; i++)cin >> avail[i];
+  for(int i = 0; i < n; i++){
+    for(int j = 0; j < m; j++){
+      cin >> mx[i][j];
+    }
+  }
+  for(int i = 0; i < n; i++){
+    for(int j = 0; j < m; j++){
+      cin >> alloc[i][j];
+      need[i][j] = mx[i][j] - alloc[i][j];
+    }
+  }
+
+
+  auto check = [&](int i){
+    for(int j = 0; j < m; j++){
+      if(request[i][j] > need[i][j] or request[i][j] > avail[j]){
+        return false;
+      }
+    }
+    for(int j = 0; j < m; j++){
+      avail[j] -= request[i][j];
+      alloc[i][j] += request[i][j];
+      need[i][j] -= request[i][j];
+    }
+    if(isSafe(avail, alloc, need)){
+      for(int j = 0; j < m; j++){
+        request[i][j] = 0;
+      }
+      return true;
+    }
+    //Rollback
+    for(int j = 0; j < m; j++){
+      avail[j] += request[i][j];
+      alloc[i][j] -= request[i][j];
+      need[i][j] += request[i][j];
+    }
+
+    return false;
+  };
+
+  int req; 
+  cin >> req;
+  while(req--){
+    int pid; 
+    cin >> pid;
+    for(int j = 0; j < m; j++){
+      cin >> request[pid][j];
+    }
+    if(check(pid)){
+      cout << "Request approved\n";
+    }else{
+      cout << "Request denied (system will be unsafe if accept)\n";
+    }
+  }
+  
+
+}
+
+
+/*
+Algorithm: Banker's Resource Request Algorithm
+
+Description:
+This program implements the Banker's Resource Request Algorithm to decide
+whether a resource request from a process can be granted safely or not.
+
+The algorithm uses three main data structures:
+1. Available:
+   Represents the currently available instances of each resource type.
+
+2. Max:
+   Represents the maximum resource requirement of each process.
+
+3. Allocation:
+   Represents the resources currently allocated to each process.
+
+The Need matrix is calculated using:
+
+        Need = Max - Allocation
+
+
+Working Procedure:
+1. A process sends a resource request.
+
+2. The algorithm first checks:
+   
+   a) Request <= Need
+      Ensures that the process does not request more than its declared
+      maximum requirement.
+
+   b) Request <= Available
+      Ensures that the required resources are currently available.
+
+3. If both conditions are satisfied, the request is temporarily allocated:
+
+        Available  = Available - Request
+        Allocation = Allocation + Request
+        Need       = Need - Request
+
+4. After temporary allocation, the Safety Algorithm is executed to check
+   whether the system remains in a safe state.
+
+5. If a safe sequence exists:
+        Request is approved and the allocation is permanently accepted.
+
+   Otherwise:
+        The changes are rolled back and the request is denied because
+        granting it may lead to an unsafe state.
+
+
+Input Format:
+First line:
+    n m
+
+    n = number of processes
+    m = number of resource types
+
+Second line:
+    Available resources (m values)
+
+Next n lines:
+    Maximum resource requirement matrix (Max)
+
+Next n lines:
+    Allocation matrix
+
+Next line:
+    Number of resource requests
+
+For each request:
+    Process ID
+    Request vector (m values)
+
+
+Output Format:
+If a request can be safely granted:
+
+    Request approved
+
+If granting the request makes the system unsafe:
+
+    Request denied (system will be unsafe if accept)
+
+
+Example Input:
+
+5 3
+
+3 3 2
+
+7 5 3
+3 2 2
+9 0 2
+2 2 2
+4 3 3
+
+0 1 0
+2 0 0
+3 0 2
+2 1 1
+0 0 2
+
+2
+
+1
+1 0 2
+
+3
+0 1 1
+
+
+Example Output:
+
+Request approved
+Request denied (system will be unsafe if accept)
+
+
+Time Complexity:
+Safety checking takes O(n^2 * m)
+
+where:
+n = number of processes
+m = number of resource types
+*/
