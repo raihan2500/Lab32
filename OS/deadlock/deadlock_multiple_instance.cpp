@@ -1,0 +1,159 @@
+#include<bits/stdc++.h>
+using namespace std;
+
+#define int long long
+
+#ifdef DEBUG
+#include<algo/debug.h>
+#include<algo/resources.h>
+#else
+#   define clog if (0) cerr
+#   define DB(...)
+#   define db(...) "" 
+#endif
+
+const int M = 1e9 + 7;
+const int N = 2e5 + 10;
+
+
+int32_t main(){
+  int n, m;
+  cin >> n >> m;
+  vector<int> avail(m), work(m), finished(n);
+  vector<vector<int>> request(n, vector<int>(m)), alloc = request;
+
+  for(int i = 0; i < m; i++)cin >> avail[i];
+  for(int i = 0; i < n; i++){
+    for(int j = 0; j < m; j++){
+      cin >> alloc[i][j];
+    }
+  }
+  for(int i = 0; i < n; i++){
+    for(int j = 0; j < m; j++){
+      cin >> request[i][j];
+    }
+  }
+
+
+  work = avail;
+
+  auto check = [&](int i){
+    for(int j = 0; j < m; j++){
+      if(request[i][j] > work[j]){
+        return false;
+      }
+    }
+    for(int j = 0; j < m; j++){
+      work[j] += alloc[i][j];
+    }
+    return true;
+  };
+
+  int completed = 0;
+  while(completed < n){
+    bool flg = false;
+    for(int i = 0; i < n; i++){
+      if(!finished[i] and check(i)){
+        flg = true;
+        completed++;
+        finished[i] = true;
+      }
+    }
+    if(!flg)break;
+  }
+
+
+  if(completed < n){
+    cout << "Deadlock exists\n";
+  }else{
+    cout << "No deadlock found\n";
+  }
+
+}
+
+/*
+Algorithm: Deadlock Detection Algorithm (Multiple Instances of Resources)
+
+Description:
+This program detects whether a deadlock exists in a system where each resource
+type can have multiple instances. The algorithm uses the Available, Allocation,
+and Request matrices.
+
+The algorithm works as follows:
+1. Initialize Work with the currently available resources:
+   
+        Work = Available
+
+2. Check each unfinished process to see whether its current resource request
+   can be satisfied:
+
+        Request[i] <= Work
+
+3. If a process can complete, assume it finishes and releases all resources
+   it was holding:
+
+        Work = Work + Allocation[i]
+
+   The process is then marked as finished.
+
+4. Repeat the process until either all processes are finished or no more
+   processes can proceed.
+
+5. After the process:
+   - If all processes are finished, no deadlock exists.
+   - If some processes remain unfinished, those processes are involved in
+     a deadlock.
+
+Input Format:
+First line:
+    n m
+
+    n = number of processes
+    m = number of resource types
+
+Second line:
+    Available resources (m values)
+
+Next n lines:
+    Allocation matrix
+    (resources currently allocated to each process)
+
+Next n lines:
+    Request matrix
+    (additional resources currently requested by each process)
+
+Output Format:
+If deadlock exists:
+    Deadlock exists
+
+If no deadlock exists:
+    No deadlock found
+
+
+Example Input:
+
+3 3
+
+0 0 0
+
+1 0 0
+0 1 0
+0 0 1
+
+0 1 0
+0 0 1
+1 0 0
+
+
+Example Output:
+
+Deadlock exists
+
+
+Time Complexity:
+O(n^2 * m)
+
+where:
+n = number of processes
+m = number of resource types
+*/
